@@ -1,0 +1,25 @@
+import requests
+
+# Test case 1: Upload a CSV file with valid patent data
+file_path = "path/to/valid_patent_data.csv"
+files = {"file": open(file_path, "rb")}
+response = requests.post("http://localhost:8000/categorize_patents", files=files)
+assert response.status_code == 200
+assert response.json()["message"] == "Patents categorized successfully"
+# Add more assertions to validate the categorized patents
+
+# Test case 2: Upload a CSV file with invalid format
+file_path = "path/to/invalid_format.csv"
+files = {"file": open(file_path, "rb")}
+response = requests.post("http://localhost:8000/categorize_patents", files=files)
+assert response.status_code == 400
+assert response.json()["detail"] == "Invalid file format. Please upload a CSV file."
+
+# Test case 3: Upload a CSV file with missing columns
+file_path = "path/to/missing_columns.csv"
+files = {"file": open(file_path, "rb")}
+response = requests.post("http://localhost:8000/categorize_patents", files=files)
+assert response.status_code == 400
+assert response.json()["detail"] == "Missing columns in the uploaded file. Please make sure the file contains ID, Title, and Abstract columns."
+
+# Add more test cases as needed
